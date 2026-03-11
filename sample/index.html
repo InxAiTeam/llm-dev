@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>範例表單 - Sample Form</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      color: #1a1a2e;
+      margin-bottom: 0.4rem;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 0.95rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 0.35rem;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.6rem 0.85rem;
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: #111;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79,70,229,0.12);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 0.75rem;
+      background: #4f46e5;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 0.4rem;
+    }
+
+    .btn:hover { background: #4338ca; }
+
+    #successMessage {
+      display: none;
+      background: #ecfdf5;
+      border: 1.5px solid #6ee7b7;
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    #successMessage h2 {
+      color: #065f46;
+      margin-bottom: 0.5rem;
+    }
+
+    #successMessage p {
+      color: #047857;
+      font-size: 0.9rem;
+    }
+
+    #submittedData {
+      margin-top: 1rem;
+      text-align: left;
+      background: #f0fdf4;
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      font-size: 0.85rem;
+      color: #065f46;
+    }
+
+    #submittedData dt { font-weight: 700; margin-top: 0.4rem; }
+    #submittedData dd { margin-left: 1rem; word-break: break-all; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>聯絡我們</h1>
+    <p class="subtitle">Contact Form — 請填寫以下表單</p>
+
+    <form id="contactForm">
+      <div class="form-group">
+        <label for="name">姓名 (Name) <span style="color:red">*</span></label>
+        <input type="text" id="name" name="name" placeholder="請輸入姓名" required />
+      </div>
+
+      <div class="form-group">
+        <label for="email">電子郵件 (Email) <span style="color:red">*</span></label>
+        <input type="email" id="email" name="email" placeholder="example@email.com" required />
+      </div>
+
+      <div class="form-group">
+        <label for="phone">電話 (Phone)</label>
+        <input type="tel" id="phone" name="phone" placeholder="0912-345-678" />
+      </div>
+
+      <div class="form-group">
+        <label for="subject">主旨 (Subject)</label>
+        <select id="subject" name="subject">
+          <option value="">-- 請選擇 --</option>
+          <option value="一般詢問">一般詢問</option>
+          <option value="技術支援">技術支援</option>
+          <option value="意見回饋">意見回饋</option>
+          <option value="其他">其他</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="message">訊息內容 (Message) <span style="color:red">*</span></label>
+        <textarea id="message" name="message" placeholder="請輸入您的訊息…" required></textarea>
+      </div>
+
+      <button type="submit" class="btn" id="submitBtn">送出表單 (Submit)</button>
+    </form>
+
+    <div id="successMessage">
+      <h2>✅ 表單已成功送出！</h2>
+      <p>感謝您的填寫，我們將盡快回覆您。</p>
+      <dl id="submittedData"></dl>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('contactForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const data = {
+        '姓名': document.getElementById('name').value,
+        '電子郵件': document.getElementById('email').value,
+        '電話': document.getElementById('phone').value,
+        '主旨': document.getElementById('subject').value,
+        '訊息': document.getElementById('message').value,
+      };
+
+      const dl = document.getElementById('submittedData');
+      dl.innerHTML = Object.entries(data)
+        .filter(([, v]) => v)
+        .map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`)
+        .join('');
+
+      document.getElementById('contactForm').style.display = 'none';
+      document.getElementById('successMessage').style.display = 'block';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+name: Fill Form with GitHub Copilot LLM + MCP Playwright
+
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: 'GitHub Copilot / GitHub Models model name'
+        required: false
+        default: 'gpt-4o'
+        type: string
+
+permissions:
+  contents: read
+  models: read
+
+jobs:
+  fill-form:
+    name: Fill Sample Form
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Install Chromium browser binary + system dependencies required for headless mode
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Fill form with GitHub Copilot LLM + MCP Playwright
+        run: node scripts/fill-form.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COPILOT_MODEL: ${{ inputs.model || 'gpt-4o' }}
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: form-screenshots
+          path: screenshots/
+          if-no-files-found: warn
