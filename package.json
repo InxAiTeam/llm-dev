@@ -1,0 +1,14 @@
+{
+  "name": "llm-dev-playwright",
+  "version": "1.0.0",
+  "description": "GitHub Action integrating GitHub Copilot LLM Models with MCP Playwright for automated form filling",
+  "type": "module",
+  "scripts": {
+    "fill-form": "node scripts/fill-form.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.6.1",
+    "@playwright/mcp": "^0.0.68",
+    "openai": "^4.86.1"
+  }
+}
